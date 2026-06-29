@@ -1,4 +1,4 @@
-set shell := ["bash", "-cu"]
+set shell := ["bash", "-euc"]
 
 _semver_regex := '^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?(\+[0-9A-Za-z.-]+)?$'
 
@@ -32,3 +32,14 @@ bump kind='patch':
 
 tag:
     @test -z "$(git status --porcelain)" || { echo "Commit version bump before tagging."; exit 1; }; version=$(jq -r '.version' .codex-plugin/plugin.json); git tag "v$version" && echo "Created tag v$version"
+
+release kind='patch':
+    @test -z "$(git status --porcelain)" || { echo "Commit or stash existing changes before releasing."; exit 1; }
+    @just bump "{{kind}}"
+    @version=$(jq -r '.version' .codex-plugin/plugin.json); \
+      git add .codex-plugin/plugin.json .claude-plugin/plugin.json; \
+      git commit -m "chore: bump version to $version"; \
+      git push; \
+      git tag "v$version"; \
+      git push origin "v$version"; \
+      echo "Released v$version"
