@@ -1,0 +1,20 @@
+{
+    "name": "nunu-ai",
+    "interface": {
+        "displayName": "nunu.ai Plugins"
+    },
+    "plugins": [
+        {
+            "name": "nexus-skills",
+            "source": {
+                "source": "local",
+                "path": "./"
+            },
+            "policy": {
+                "installation": "AVAILABLE",
+                "authentication": "ON_INSTALL"
+            },
+            "category": "Productivity"
+        }
+    ]
+}
