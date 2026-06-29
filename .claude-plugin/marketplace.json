@@ -1,0 +1,15 @@
+{
+    "name": "nunu-ai",
+    "description": "Official nunu.ai plugins for the nexus platform",
+    "owner": {
+        "name": "nunu.ai",
+        "email": "team@nunu.ai"
+    },
+    "plugins": [
+        {
+            "name": "nexus-skills",
+            "source": "./",
+            "description": "Skills for the nexus MCP from nunu.ai"
+        }
+    ]
+}
