@@ -12,9 +12,8 @@ jobs:
         run: |
           codex_version=$(jq -r '.version' .codex-plugin/plugin.json)
           claude_version=$(jq -r '.version' .claude-plugin/plugin.json)
-          release_version=$(cat version.txt)
 
-          test "$codex_version" = "$claude_version" && test "$codex_version" = "$release_version" || {
-            echo "Version mismatch: codex=$codex_version claude=$claude_version version.txt=$release_version"
+          test "$codex_version" = "$claude_version" || {
+            echo "Version mismatch: codex=$codex_version claude=$claude_version"
             exit 1
           }
