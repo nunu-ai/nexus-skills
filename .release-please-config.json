@@ -1,0 +1,21 @@
+{
+  "packages": {
+    ".": {
+      "release-type": "simple",
+      "package-name": "nexus-skills",
+      "version-file": "version.txt",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": ".codex-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": ".claude-plugin/plugin.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    }
+  }
+}

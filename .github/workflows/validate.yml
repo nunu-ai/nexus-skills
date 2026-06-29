@@ -1,0 +1,20 @@
+name: validate
+
+on:
+  pull_request:
+
+jobs:
+  manifest-versions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check plugin manifest versions match
+        run: |
+          codex_version=$(jq -r '.version' .codex-plugin/plugin.json)
+          claude_version=$(jq -r '.version' .claude-plugin/plugin.json)
+          release_version=$(cat version.txt)
+
+          test "$codex_version" = "$claude_version" && test "$codex_version" = "$release_version" || {
+            echo "Version mismatch: codex=$codex_version claude=$claude_version version.txt=$release_version"
+            exit 1
+          }
