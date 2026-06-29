@@ -38,12 +38,12 @@ the step reaches it.
 | You are matched with opponent "Bot_Kappa" | After matchmaking, an opponent name is displayed |
 | Winning the mini game 234 gold is added to your balance | After winning the mini game the displayed reward is added to your balance |
 
-When porting from TestRail, carry the case id into the check's optional `testrail_id` field so traceability survives.
+When porting from TestRail, keep **one check per TestRail case** so each maps 1:1 and traceability stays clear. (Per-result TestRail linking on the API surface is coming; for now the structured `expected_results` entries carry only the check text.)
 
 ## Writing good Steps
 A step's `goal` is actionable. Write the minimum imperative instructions that move the executor to the point where the step's check can be performed. Keep observations out of the goal, they belong into checks.
 - **Imperative and lean.** "Open the hamburger menu, then tap Settings." If detail isn't needed, stay high-level. Don't write a book
-- **One screen / one operation per step.** Bundle all checks visible at that point into the step's `finish_condition`. Verifying multiple section labels on the Settings screen is *one* step, not multiple.
+- **One screen / one operation per step.** Bundle all checks visible at that point into the step's `expected_results` (one entry per check). Verifying multiple section labels on the Settings screen is *one* step, not multiple.
 
 **Hints**
 test and setups are often flaky, unexpected popups appearing, saved account data etc and other things might happen. Additionally the executor might make mistakes, clicking on a wrong button, accidentally resetting progress etc. To clarify how these situations should be handled, the hint manual exists. It's mainly for handling optional situations and error recovery/prevention. These things then don't belong into the instructions
