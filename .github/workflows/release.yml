@@ -18,9 +18,15 @@ jobs:
           tag="${GITHUB_REF_NAME}"
           codex_version=$(jq -r '.version' .codex-plugin/plugin.json)
           claude_version=$(jq -r '.version' .claude-plugin/plugin.json)
+          npm_version=$(jq -r '.version' package.json)
 
           test "$codex_version" = "$claude_version" || {
             echo "Version mismatch: codex=$codex_version claude=$claude_version"
+            exit 1
+          }
+
+          test "$codex_version" = "$npm_version" || {
+            echo "Version mismatch: codex=$codex_version npm=$npm_version"
             exit 1
           }
 

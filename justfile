@@ -24,10 +24,12 @@ bump kind='patch':
         esac; \
       fi; \
       [[ "$next" =~ {{_semver_regex}} ]] || { echo "Invalid version: $next"; exit 1; }; \
-      VERSION="$next" perl -0pi -e 's/"version"\s*:\s*"[^"]+"/"version": "$ENV{VERSION}"/' .codex-plugin/plugin.json .claude-plugin/plugin.json; \
+      VERSION="$next" perl -0pi -e 's/"version"\s*:\s*"[^"]+"/"version": "$ENV{VERSION}"/' .codex-plugin/plugin.json .claude-plugin/plugin.json package.json; \
       codex_version=$(jq -r '.version' .codex-plugin/plugin.json); \
       claude_version=$(jq -r '.version' .claude-plugin/plugin.json); \
+      npm_version=$(jq -r '.version' package.json); \
       test "$codex_version" = "$claude_version" || { echo "Version mismatch: codex=$codex_version claude=$claude_version"; exit 1; }; \
+      test "$codex_version" = "$npm_version" || { echo "Version mismatch: codex=$codex_version npm=$npm_version"; exit 1; }; \
       echo "Bumped nexus-skills from $current to $next"
 
 tag:
@@ -37,7 +39,7 @@ release kind='patch':
     @test -z "$(git status --porcelain)" || { echo "Commit or stash existing changes before releasing."; exit 1; }
     @just bump "{{kind}}"
     @version=$(jq -r '.version' .codex-plugin/plugin.json); \
-      git add .codex-plugin/plugin.json .claude-plugin/plugin.json; \
+      git add .codex-plugin/plugin.json .claude-plugin/plugin.json package.json; \
       git commit -m "chore: bump version to $version"; \
       git push; \
       git tag "v$version"; \
