@@ -19,6 +19,8 @@ The process of making a good test case consists of:
 4. **Group steps** into **collections** by setup / feature so they're reusable and readable.
 A good verification test is that route, written down.
 
+Before writing your first test, read [references/examples.md](references/examples.md) for worked examples of complete verification tests.
+
 ## Writing checks
 A check must be **unambiguously true or false by observing the app at the moment
 the step reaches it.
