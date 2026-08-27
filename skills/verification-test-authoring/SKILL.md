@@ -1,5 +1,5 @@
 ---
-name: verification-tests
+name: verification-test-authoring
 description: Author, port, and edit high-quality verification tests for the nunu.ai (nexus) platform. Use this whenever the user wants to create, write, port, convert, restructure, review, split, or update a verification test. Default to using it for anything that looks like writing or editing nunu/nexus tests, even if the user doesn't say "skill".
 ---
 
@@ -19,7 +19,7 @@ The process of making a good test case consists of:
 4. **Group steps** into **collections** by setup / feature so they're reusable and readable.
 A good verification test is that route, written down.
 
-Before writing your first test, read [references/examples.md](references/examples.md) for worked examples of complete verification tests.
+Before writing your first test, read [references/examples.md](./references/examples.md) for worked examples of complete verification tests.
 
 ## Writing checks
 A check must be **unambiguously true or false by observing the app at the moment
@@ -40,6 +40,11 @@ the step reaches it.
 | You are matched with opponent "Bot_Kappa" | After matchmaking, an opponent name is displayed |
 | Winning the mini game 234 gold is added to your balance | After winning the mini game the displayed reward is added to your balance |
 
+**Never make a check conditional to work around missing data.** Rewriting
+"clicking Archive removes the bug from the list" into "*when a bug is listed*,
+clicking Archive removes it from the list" makes the check pass without being
+exercised, and nothing in the result says it never ran.
+
 When porting from TestRail, keep **one check per TestRail case** so each maps 1:1 and traceability stays clear. (Per-result TestRail linking on the API surface is coming; for now the structured `expected_results` entries carry only the check text.)
 
 ## Writing good Steps
@@ -53,13 +58,22 @@ test and setups are often flaky, unexpected popups appearing, saved account data
 "if you land on X, tap back"
 "always choose new game+ if it's available"
 
+**Every state a hint names needs an attached action.** The examples above all do
+this — they say what to do, not just what might happen. A hint that only
+describes a state leaves the executor to invent a response, and different runs
+will invent different ones. "The run may show as tearing down, which means it
+already finished" tells the executor what it is seeing and nothing about what to
+do, so one run reports a defect and another relaunches and retries. Write "...if
+it shows as tearing down it already finished; start it again and resume polling"
+instead.
+
 ## Ordering and grouping
 Order the steps as the **most efficient single walk** through the app:
 - **Setup first.** Launch, log in, reset user data, reach the screen under test.
 - **Follow the natural flow.** Minimize back-and-forth navigation. If three checks all live one tap apart, make them consecutive steps.
 - **Group by feature.** All of Feature A's steps together, then Feature B's.
 - **Destructive/irreversible last.** Account deletion, build deletion, logout, put them at the end or isolate them so they don't strand later checks.
-
+- **Cleanup steps at the end are the ones most likely to be blocked**, because anything failing earlier cascades into them. Assume they will sometimes not run, and make the test's opening steps tolerant of what they would have removed.
 
 ## Step Collections
 A collection is a named bundle of steps. Use them for two things:

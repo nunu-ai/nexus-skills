@@ -12,13 +12,14 @@
   "keywords": [
     "nexus",
     "nunu",
-    "verification-tests"
+    "verification-test-authoring",
+    "flaky-test-refinement"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Nexus Skills",
     "shortDescription": "Skills for the nexus platform",
-    "longDescription": "Codex skills for authoring, porting, reviewing, and editing verification tests for the nunu.ai nexus platform.",
+    "longDescription": "Codex skills for authoring repeatable nexus verification tests and refining flaky tests by comparing passing and failing run history.",
     "developerName": "nunu.ai",
     "category": "Productivity",
     "capabilities": [
@@ -27,8 +28,10 @@
     ],
     "websiteURL": "https://nunu.ai",
     "defaultPrompt": [
-      "Use the verification-tests skill to write a nexus verification test.",
-      "Use the verification-tests skill to review this nexus verification test."
+      "Use verification-test-authoring to turn these acceptance criteria into a repeatable nexus verification test.",
+      "Use verification-test-authoring to review this nexus test and tighten any ambiguous checks, goals, or hints.",
+      "Use flaky-test-refinement to compare these passing and failing run IDs, explain the divergence, and stabilize the test.",
+      "Use flaky-test-refinement to analyze this test plan's inconsistent results across configs and propose precise fixes."
     ],
     "brandColor": "#10A37F"
   }
