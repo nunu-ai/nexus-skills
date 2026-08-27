@@ -4,15 +4,18 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 
 ## Skills
 
-- **verification-test-authoring** — author, port, and edit high-quality verification tests for the nexus platform
-- **flaky-test-refinement** — diagnose and stabilize flaky verification tests by comparing matched run history
+- ✍️ **verification-test-authoring** — author, port, and edit high-quality verification tests for the nexus platform
+- 🛠️ **flaky-test-refinement** — diagnose and stabilize flaky verification tests by comparing matched run history
 
 ## Install
 
 > [!NOTE]
 > The visual installation flows below are for the desktop apps.
 
-### Claude Desktop
+<details>
+<summary><strong>Claude</strong> — Desktop and Claude Code</summary>
+
+### Install in Claude Desktop
 
 1. Open **Settings → Plugins**.
 2. Open the **Add** menu and select **Add marketplace**.
@@ -26,7 +29,33 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 
 4. Browse the marketplace and install **Nexus Skills**.
 
-### Codex Desktop
+### Update in Claude Desktop
+
+When **Sync automatically** is enabled, Claude keeps the marketplace up to date
+when the repository changes.
+
+### Claude Code CLI
+
+Install:
+
+```shell
+/plugin marketplace add nunu-ai/nexus-skills
+/plugin install nexus-skills@nunu-ai
+```
+
+Update:
+
+```shell
+/plugin marketplace update nunu-ai
+/plugin update nexus-skills@nunu-ai
+```
+
+</details>
+
+<details>
+<summary><strong>Codex</strong> — Desktop and CLI</summary>
+
+### Install in Codex Desktop
 
 1. Open **Plugins**.
 2. Open the **Add** menu and select **Add a marketplace**.
@@ -40,36 +69,26 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 
 4. Browse the plugin directory and install **Nexus Skills**.
 
-### Claude Code CLI
+### Update in Codex Desktop
 
-```shell
-/plugin marketplace add nunu-ai/nexus-skills
-/plugin install nexus-skills@nunu-ai
-```
+Open **Plugins**, select the `nunu.ai Plugins` marketplace, and update
+**Nexus Skills** when an update is available.
 
 ### Codex CLI
 
-Add this repository as a Codex plugin marketplace:
+Install the marketplace:
 
 ```shell
 codex plugin marketplace add nunu-ai/nexus-skills
 ```
 
-Then restart Codex and install `Nexus Skills` from the `nunu.ai Plugins`
-marketplace.
-
-## Update
-
-### In Claude Code
-
-Refresh the marketplace first, then update the installed plugin:
+Refresh it later:
 
 ```shell
-/plugin marketplace update nunu-ai
-/plugin update nexus-skills@nunu-ai
+codex plugin marketplace upgrade nunu-ai
 ```
 
-### In Codex
+After adding or refreshing the marketplace, install or update **Nexus Skills**
+from the plugin directory. Restart Codex if the updated skills do not appear.
 
-Open the plugin directory, choose the `nunu.ai Plugins` marketplace, and update
-`Nexus Skills`.
+</details>
