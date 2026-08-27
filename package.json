@@ -1,6 +1,6 @@
 {
   "name": "nexus-skills",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Skills for the nexus MCP and nunu.ai platform.",
   "repository": "https://github.com/nunu-ai/nexus-skills",
   "files": [
