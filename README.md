@@ -9,13 +9,10 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 
 ## Install
 
-> [!NOTE]
-> The visual installation flows below are for the desktop apps.
-
 <details>
-<summary><strong>Claude</strong> — Desktop and Claude Code</summary>
+<summary><strong>Claude</strong> — Desktop, Web, and Claude Code</summary>
 
-### Install in Claude Desktop
+### Install in Claude Desktop or web
 
 1. Open **Settings → Plugins**.
 2. Open the **Add** menu and select **Add marketplace**.
@@ -28,11 +25,6 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 ![Add the nunu.ai Nexus Skills marketplace](assets/claude-add-marketplace.png)
 
 4. Browse the marketplace and install **Nexus Skills**.
-
-### Update in Claude Desktop
-
-When **Sync automatically** is enabled, Claude keeps the marketplace up to date
-when the repository changes.
 
 ### Claude Code CLI
 
