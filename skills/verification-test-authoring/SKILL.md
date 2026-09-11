@@ -6,7 +6,7 @@ description: Author, port, and edit high-quality verification tests for the nunu
 # Nunu Verification Tests
 
 ## What a verification test actually is
-A verification test is a **an ordered, grouped list of checks**, wrapped in just
+A verification test is **an ordered, grouped list of checks**, wrapped in just
 enough instruction that an executor (a human or an agent) can walk the app once
 and confirm every check along the way.
 
@@ -14,7 +14,7 @@ We often call a check also verification item, expected result, acceptance criter
 
 The process of making a good test case consists of:
 1. **Enumerate the checks** — the atomic pass/fail facts you need to confirm. One check ≈ one TestRail test case.
-2. **Group checks that share a screen or moment** into a **step**, and write the shortest instruction (the step's *goal*) that gets the executor there.
+2. **Group checks that share a screen or moment** into a **step**, and write the shortest `instruction` that gets the executor there.
 3. **Order the steps** into the most efficient single walk through the app.
 4. **Group steps** into **collections** by setup / feature so they're reusable and readable.
 A good verification test is that route, written down.
@@ -45,15 +45,18 @@ the step reaches it.
 clicking Archive removes it from the list" makes the check pass without being
 exercised, and nothing in the result says it never ran.
 
-When porting from TestRail, keep **one check per TestRail case** so each maps 1:1 and traceability stays clear. (Per-result TestRail linking on the API surface is coming; for now the structured `expected_results` entries carry only the check text.)
+When porting from TestRail, keep **one check per TestRail case** so each maps 1:1 and traceability stays clear. Link the ordered case IDs on the step's optional `testrail_case_ids`; the structured `expected_results` entries carry the check text.
 
 ## Writing good Steps
-A step's `goal` is actionable. Write the minimum imperative instructions that move the executor to the point where the step's check can be performed. Keep observations out of the goal, they belong into checks.
+A step's `instruction` is actionable. Write the minimum imperative instructions that move the executor to the point where the step's check can be performed. Keep observations out of the instruction, they belong in checks.
 - **Imperative and lean.** "Open the hamburger menu, then tap Settings." If detail isn't needed, stay high-level. Don't write a book
 - **One screen / one operation per step.** Bundle all checks visible at that point into the step's `expected_results` (one entry per check). Verifying multiple section labels on the Settings screen is *one* step, not multiple.
 
 **Hints**
-test and setups are often flaky, unexpected popups appearing, saved account data etc and other things might happen. Additionally the executor might make mistakes, clicking on a wrong button, accidentally resetting progress etc. To clarify how these situations should be handled, the hint manual exists. It's mainly for handling optional situations and error recovery/prevention. These things then don't belong into the instructions
+Tests and setups are often flaky: unexpected popups, saved account data, and
+mistakes such as clicking the wrong button can change the path. Use the `hints`
+array for optional situations and error recovery/prevention; these do not belong
+in the `instruction`.
 "don't click the blue button"
 "if you land on X, tap back"
 "always choose new game+ if it's available"
@@ -77,5 +80,33 @@ Order the steps as the **most efficient single walk** through the app:
 
 ## Step Collections
 A collection is a named bundle of steps. Use them for two things:
-- **Shared Steps** Saving a collection with `is_shared: true` allows reuse across different Verification Tests. This is very useful for common setup steps.
+- **Shared Steps** Create a reusable collection with `create_shared_step`, then reference its returned ID with an item of type `shared_steps`. This is very useful for common setup steps.
 - **Grouping for Readability** Group related steps, for example by feature or phase in the test, giving a good label makes the test more readable
+
+## Authoring shape
+
+The examples in [references/examples.md](./references/examples.md) are payloads for
+`create_verification_test`, not the response from `get_test`:
+
+- The top level contains `name`, optional `project_id`, `tags`, `folder_path`,
+  `budget`, and a `players` array. Include `project_id` when the credentials
+  can access multiple projects; `infra-test` and `nexus` are valid examples in
+  the nunu.ai organization. The create tool already knows this is a verification test;
+  do not add a `test` wrapper or `test_type`.
+- Each player has a name, an `agent_config_id`, and ordered `items`. Resolve
+  agent config IDs with `list_project_resources` using `resource: "agent_configs"`.
+- A step item has `type: "step"`, `instruction`, `expected_results`, and
+  optional `hints` and `testrail_case_ids`. `expected_results` may be a string
+  or an array; use an array when there are multiple checks.
+- An inline collection has `type: "collection"`, a name, and ordered `steps`.
+  Its nested steps use the same `instruction`, `expected_results`, and `hints`
+  fields and may also include `testrail_case_ids`, but do not have their own
+  `type`.
+- A shared collection is referenced as `{ "type": "shared_steps",
+  "shared_collection_id": "..." }`; do not inline or edit its steps in the
+  test payload. Find IDs with `list_shared_steps`.
+
+`get_test` returns useful read-only fields such as `player_id`, `step_id`,
+`collection_id`, and `is_shared`. Do not copy those server-managed fields into a
+new create payload. For small edits, use `update_verification_test` with the
+version from `get_test` and flat one-based `step_id` selectors.

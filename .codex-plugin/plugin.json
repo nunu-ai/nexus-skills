@@ -29,7 +29,7 @@
     "websiteURL": "https://nunu.ai",
     "defaultPrompt": [
       "Use verification-test-authoring to turn these acceptance criteria into a repeatable nexus verification test.",
-      "Use verification-test-authoring to review this nexus test and tighten any ambiguous checks, goals, or hints.",
+      "Use verification-test-authoring to review this nexus test and tighten any ambiguous checks, instructions, or hints.",
       "Use flaky-test-refinement to compare these passing and failing run IDs, explain the divergence, and stabilize the test.",
       "Use flaky-test-refinement to analyze this test plan's inconsistent results across configs and propose precise fixes."
     ],

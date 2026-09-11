@@ -18,18 +18,18 @@ failed, and diff them.**
 Single test case:
 
 ```
-list_entities(type="past_runs", test_case_id=<id>)
+list_runs(lifecycle="past", test_case_id=<id>, detail="triage")
 ```
 
 Whole plan:
 
 ```
-list_entities(type="test_plan_executions", test_plan_id=<id>)
-list_entities(type="past_runs", test_plan_execution_id=<id>)   # per execution
+list_test_plan_executions(lifecycle="past", test_plan_id=<id>, detail="triage")
+list_runs(lifecycle="past", test_plan_execution_id=<id>, detail="triage")   # per execution
 ```
 
-Either way, lay out runs against results and step-result summaries
-(`{"SUCCESS": 5, "FAILED": 1, "BLOCKED": 2}`). Look for which steps fail, whether
+Either way, lay out runs against results and verification-check summaries
+(`{"passed": 5, "failed": 1, "blocked": 2}`). Look for which steps fail, whether
 failures repeat or scatter, whether whole executions cluster.
 
 A test that passes at least once is flaky. One that never passes may be a real
@@ -42,18 +42,20 @@ replicates, and diffing across them produces confident wrong answers.
 
 Check every axis, not just platform:
 
-- **Test version** — `test_version` on the run. Runs of different versions are
+- **Test version** — `test.version` on the run. Runs of different versions are
   different tests.
-- **Build** — `list_entities(type="builds")`; executions filter by `build_id`.
-- **Deployment config** — `list_entities(type="deployment_configs")` gives each
-  config's `kind` plus its own environment settings (geolocation, locale, network
-  conditions, build source).
-- **Device** — one config can cover several devices via `deviceLabels`, and runs
-  started across all configured devices land on different hardware.
+- **Build** — `list_project_resources(resource="builds")`; runs filter by
+  `build_id`.
+- **Deployment config** — `list_project_resources(resource="deployment_configs")`
+  gives the saved configs. Triage run results expose the selected config under
+  each player, including its version and observed platform.
+- **Device** — one deployment can cover several labeled devices; runs started
+  across all configured devices land on different hardware.
 - **Agent config** — overridable per run, so two runs of one test can use
   different agents.
 - **Template data** — when a test uses Handlebars variables, different
-  `templateData` means the agent saw different instructions.
+  `template.data` values passed to `start_test` or `start_test_plan` mean the
+  agent saw different instructions.
 - **Per-player / per-slot configs** — multiplayer tests can mix platforms across
   players.
 
@@ -106,7 +108,8 @@ When a failure hinges on what the UI was showing — a stalled operation, an emp
 list, a control that "did nothing" — pull the image:
 
 ```
-get_run_image(run_id=<id>, image_ref="<event_ref>#img0")
+inspect_run(run_id=<id>, view="outline", include=["artifacts", "bug_occurrences"])
+get_run_file(run_id=<id>, file_ref="<event_ref>#img0")
 ```
 
 One trace read "the dialog confirms the upload is in progress"; the agent waited,
@@ -125,7 +128,7 @@ Where a bug was reported, the screenshot decides whether it's real.
 | **Timing / settling race** | State read before the UI finished updating | A positive precondition (see below), not a longer wait |
 | **Positional drift** | Interaction landed elsewhere — window size, layout shift, density, keyboard | Locate the element fresh; forbid remembered coordinates |
 | **Environment state leakage** | Prior run left the app logged in, cached, permission-granted, mid-flow | Make the step establish its own starting state |
-| **Fixture dependency** | Step needs shared data that runs consume, or another test produces | Skip clause in the goal, or seed in-step |
+| **Fixture dependency** | Step needs shared data that runs consume, or another test produces | Skip clause in the instruction, or seed in-step |
 | **Real defect** | Reproduces on every run and every config | Leave it. Report it |
 
 Refinement is biased toward making red things green, so run on a genuine defect
@@ -134,7 +137,7 @@ so rather than encoding "known quirk" on a hunch.
 
 ## 6. Put the fix in the right slot
 
-- **Goal** — what to do, including legitimate variation. Optional paths and skip
+- **Instruction** — what to do, including legitimate variation. Optional paths and skip
   conditions go here, in plain sight: `"...then archive it. If nothing is listed,
   this step and its check can be skipped."`
 - **Expected results** — binary observable facts. Never rewrite a check into a
@@ -155,16 +158,17 @@ what people want. A copy is for when the baseline has to stay runnable for
 comparison, or when the change is large enough to want a fallback. Don't assume
 either way.
 
-- **Editing in place** — `update_test_case` needs `expectedVersion`, and never
-  echo server-managed fields (`test_step_id`, `composite_test_id`, collection
-  `version` / `created_at` / `created_by`); the strict schema rejects the whole
-  call.
-- **Copying** — `create_test_case`, then add it to a plan if it needs to run
-  alongside others.
-- **Either way, don't inline shared collections.** Pass `collection_id`,
-  `is_shared: true`, empty `steps_by_key`, `sharedCollectionStepsMode: "drop"`.
-  Editing a shared collection changes every test using it. The API rejects
-  inlined shared steps unless you pass `"drop"`.
+- **Editing in place** — read the latest test with `get_test`, pass its numeric
+  `version` as `expected_version`, and use `update_verification_test`. Small
+  edits use flat one-based `step_updates` (`player_id` plus `step_id`); replace
+  items or players only when the structure changes.
+- **Copying** — use `create_verification_test`, then add the new test to a plan
+  with `create_test_plan` or `update_test_plan` if it needs to run alongside
+  others.
+- **Either way, don't inline shared collections.** Preserve a shared collection
+  as `{ "type": "shared_steps", "shared_collection_id": "..." }`. Editing a
+  shared collection changes every test using it; use `get_shared_step` and
+  `update_shared_step` instead.
 - **Re-run and re-diff.** Not confirmed until the step passes on every config it
   previously failed on. Check the failure didn't just move.
 
