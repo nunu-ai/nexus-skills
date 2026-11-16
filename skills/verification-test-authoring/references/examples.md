@@ -17,6 +17,7 @@ wrapper, `test_type`, server-assigned IDs, or read-only collection fields.
   "name": "settings",
   "tags": [],
   "folder_path": "daily-regression",
+  "budget": { "max_seconds": 900 },
   "players": [
     {
       "name": "player 1",

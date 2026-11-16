@@ -83,6 +83,14 @@ A collection is a named bundle of steps. Use them for two things:
 - **Shared Steps** Create a reusable collection with `create_shared_step`, then reference its returned ID with an item of type `shared_steps`. This is very useful for common setup steps.
 - **Grouping for Readability** Group related steps, for example by feature or phase in the test, giving a good label makes the test more readable
 
+## Execution time budget
+
+Set whole-test `budget.max_seconds` to **about 3× your runtime estimate**:
+AI executor agents need extra time to observe, reason, and recover. A five-minute
+estimate should get fifteen minutes (`900` seconds); longer flows need more.
+If a timeout interrupts useful progress, increase the budget 2–3×. Respect
+explicit user limits and keep product timing checks unchanged.
+
 ## Authoring shape
 
 The examples in [references/examples.md](./references/examples.md) are payloads for
