@@ -5,6 +5,7 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 ## Skills
 
 - ✍️ **verification-test-authoring** — author, port, and edit high-quality verification tests for the nexus platform
+- 🔎 **run-debugging** — diagnose nexus runs using events, logs, screenshots, and recordings with local or remote MCP
 - 🛠️ **flaky-test-refinement** — diagnose and stabilize flaky verification tests by comparing matched run history
 - 🐞 **bug-review** — review nexus run findings, inspect evidence, and safely classify or route bug occurrences
 

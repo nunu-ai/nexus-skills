@@ -1,6 +1,6 @@
 ---
 name: flaky-test-refinement
-description: Fix flaky nexus verification tests by refining their instructions and hints against past run history — diffing runs where a step passed against runs where it failed, then locking in the path that worked. Use whenever someone asks why a test is flaky, why the same build gives different results, why runs are green one time and red the next, why the agent reports bugs that aren't real, why a run got blocked, or asks to tighten, stabilize, refine, or pin a test case. Also when someone shares run IDs or test plan executions, or asks to compare runs — including one-off "why did this run fail?" questions.
+description: Stabilize flaky nexus verification tests by comparing matched passing and failing runs, then refining instructions and hints. Use when a test gives inconsistent results, false bug reports repeat, or the user asks to tighten, stabilize, refine, or pin a test case. For general run diagnosis using logs, recordings, or infrastructure evidence, use run-debugging.
 ---
 
 # Refining flaky verification tests

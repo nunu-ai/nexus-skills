@@ -12,6 +12,7 @@
   "keywords": [
     "nexus",
     "nunu",
+    "run-debugging",
     "verification-test-authoring",
     "flaky-test-refinement"
   ],
@@ -19,7 +20,7 @@
   "interface": {
     "displayName": "Nexus Skills",
     "shortDescription": "Skills for the nexus platform",
-    "longDescription": "Codex skills for authoring repeatable nexus verification tests and refining flaky tests by comparing passing and failing run history.",
+    "longDescription": "Codex skills for authoring nexus verification tests, debugging runs with events and artifacts, and refining flaky tests by comparing passing and failing run history.",
     "developerName": "nunu.ai",
     "category": "Productivity",
     "capabilities": [
@@ -30,6 +31,7 @@
     "defaultPrompt": [
       "Use verification-test-authoring to turn these acceptance criteria into a repeatable nexus verification test.",
       "Use verification-test-authoring to review this nexus test and tighten any ambiguous checks, instructions, or hints.",
+      "Use run-debugging to investigate this run using its events, device logs, and recording.",
       "Use flaky-test-refinement to compare these passing and failing run IDs, explain the divergence, and stabilize the test.",
       "Use flaky-test-refinement to analyze this test plan's inconsistent results across configs and propose precise fixes."
     ],
