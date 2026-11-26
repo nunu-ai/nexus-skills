@@ -18,10 +18,16 @@ jobs:
           tag="${GITHUB_REF_NAME}"
           codex_version=$(jq -r '.version' .codex-plugin/plugin.json)
           claude_version=$(jq -r '.version' .claude-plugin/plugin.json)
+          cursor_version=$(jq -r '.version' .cursor-plugin/plugin.json)
           npm_version=$(jq -r '.version' package.json)
 
           test "$codex_version" = "$claude_version" || {
             echo "Version mismatch: codex=$codex_version claude=$claude_version"
+            exit 1
+          }
+
+          test "$codex_version" = "$cursor_version" || {
+            echo "Version mismatch: codex=$codex_version cursor=$cursor_version"
             exit 1
           }
 
@@ -35,7 +41,7 @@ jobs:
             exit 1
           }
       - name: Package skills
-        run: zip -r skill.zip skills
+        run: zip -r skill.zip skills LICENSE
       - name: Upload skills release asset
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
