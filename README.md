@@ -12,6 +12,17 @@ skills for the [nunu.ai](https://nunu.ai) nexus mcp/platform.
 ## Install
 
 <details>
+<summary><strong>Cursor</strong> — Desktop</summary>
+
+1. Open **Customize → Marketplace**, search for **Nexus Skills**, and install it.
+2. In **Customize → MCP Servers**, select **Connect** for `nunu` and sign in with your Nexus account.
+3. Select the organization you want Cursor to access and approve the connection.
+
+Try asking Cursor to “Review the latest failed test run in my Nexus project and summarize the evidence.” See the [Nunu MCP guide](https://docs.nunu.ai/nexus/integrations/mcp) for connection details.
+
+</details>
+
+<details>
 <summary><strong>Claude</strong> — Desktop, Web, and Claude Code</summary>
 
 ### Install in Claude Desktop or web
@@ -86,3 +97,7 @@ After adding or refreshing the marketplace, install or update **Nexus Skills**
 from the plugin directory. Restart Codex if the updated skills do not appear.
 
 </details>
+
+## License
+
+[MIT](LICENSE).

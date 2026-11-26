@@ -1,0 +1,22 @@
+{
+  "name": "nexus-skills",
+  "displayName": "Nexus Skills",
+  "version": "1.0.4",
+  "description": "Write game QA tests, investigate test runs, stabilize flaky tests, and review reported bugs with nunu.ai Nexus.",
+  "author": {
+    "name": "nunu.ai",
+    "email": "team@nunu.ai"
+  },
+  "homepage": "https://nunu.ai",
+  "repository": "https://github.com/nunu-ai/nexus-skills",
+  "license": "MIT",
+  "keywords": [
+    "game-testing",
+    "qa",
+    "nexus",
+    "nunu-ai",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json"
+}

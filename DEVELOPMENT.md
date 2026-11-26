@@ -12,8 +12,8 @@ git commit -m "feat: add build storage verification guidance"
 ## Releases
 
 This repository releases from tags. The release workflow checks that the tag
-matches the plugin manifest version, zips the `skills/` folder as `skill.zip`,
-creates a GitHub release, and uploads the zip as a release asset.
+matches the plugin and npm package versions, bundles `skills/` and `LICENSE`
+in `skill.zip`, and uploads the zip as a GitHub release asset.
 
 Run the release command from a clean worktree:
 
@@ -24,5 +24,15 @@ just release major  # major release, for breaking changes
 just release 1.2.3  # explicit version
 ```
 
-The command bumps both plugin manifests, commits the version bump, pushes the
-branch, creates the matching `vX.Y.Z` tag, and pushes the tag.
+The command bumps the plugin manifests and npm package, commits the version
+bump, pushes the branch, creates the matching `vX.Y.Z` tag, and pushes the tag.
+
+## Test the Cursor plugin locally
+
+1. Copy the repository to `~/.cursor/plugins/local/nexus-skills` so the folder
+   contains `.cursor-plugin/plugin.json`, `skills/`, and `mcp.json`.
+2. Run **Developer: Reload Window** in Cursor and open **Customize**.
+3. Confirm that **Nexus Skills** exposes the four skills listed in the README
+   and the `nunu` MCP server.
+4. Select **Connect** for `nunu`, sign in to Nexus, and ask Cursor to list the
+   Nexus projects you can access.
